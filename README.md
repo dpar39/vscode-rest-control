@@ -18,52 +18,103 @@
   </a>
 </p>
 
-**This extension is a fork from [Remote Control](https://github.com/estruyf/vscode-remote-control).** The motivation behind is that while `Remote Control` uses `websockets`, for my use case I can only make HTTP REST calls. In addition, many commands I want to use can't simply be invoked without special handling of the arguments, e.g., `revealRange`, `vscode.open`, etc., as they require newing up instances of specific VSCode objects to work properly.
+This extension allows you to remotely control instances of Visual Studio Code by exposing a REST endpoint that you can use to invoke vscode commands. In the background it launches a HTTP server that listen to requests of commands to execute.
 
-This extension allows you to remotely control Visual Studio Code. Run commands from anywhere you want on your device. The extension allows you to take VSCode automation to the next level.
+The demo below shows how we can open a terminal, run some commands in it, then close all terminals, open a file with the cursor in a specified location and finally start a debug session on the same file that is orchestrating it all!
 
-In the background it uses a a simple HTTP server in order to listen to commands it should execute in your VSCode instance.
+![sample automation demo](assets/automation-demo.gif)
 
-![](assets/example.gif)
-
-> **Info**: This is a sample of how I use the Remote Control extension in combination with the macOS [Raycast](https://raycast.com/) app.
+**DISCLAIMER: This extension was forked from [Remote Control](https://github.com/estruyf/vscode-remote-control).**
+The main motivation behind it was that while `Remote Control` uses `websockets`, for my use case I can only rely on HTTP REST calls. In addition, some commands I need to use require non-primitive JavaScript types which are not handled except for a couple of cases in the original extension (e.g. the `Uri` for `vscode.open` command).
 
 ## Extension Settings
 
 The extension has the following settings which you can use to configure it:
 
-- `remoteControl.enable`: enable/disable this extension
-- `remoteControl.host`: the hostname of the websocket server. Default: `127.0.0.1`.
-- `remoteControl.port`: set the port number for the websocket to start the server
-- `remoteControl.fallbacks`: an array of port numbers to fallback to if the port is already in use.
-
-## Current port in use
-
-Once the extension starts, it will show the port number in the status bar. This way you can easily see which port is used.
-
-![](assets/statusbar-item.png)
+- `restRemoteControl.enable`: enable/disable this extension
+- `restRemoteControl.host`: the hostname of the websocket server. Default: `127.0.0.1`.
+- `restRemoteControl.port`: set the port number on which the HTTP server will listen
+- `restRemoteControl.fallbacks`: an array of port numbers to fallback to if the port is already in use.
 
 ## Usage
 
-When you install this extension, it will automatically start a HTTP server on port `3710`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `remoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use.
+When you install this extension, it will automatically try to start a HTTP server on port `37100`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `restRemoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use.
 
-Once installed, you can execute `commands` for VSCode remotely by calling the Remote Control its websocket. Here is an example how to open the terminal in VSCode:
+![status bar listening message](assets/statusbar-item.png)
+
+
+Once installed, you can execute vscode `commands` by making HTTP requests. Here are few examples using `curl`:
 
 ```bash
-echo "{ \"command\": \"workbench.action.terminal.new\" }" | websocat ws://localhost:3710
+# Create a new terminal
+curl -X POST http://localhost:37100 -d '{"command":"workbench.action.terminal.new"}'
+
+# Run `pwd` in the currently active terminal
+curl -X POST http://localhost:37100 -d '{"command":"custom.runInTerminal", "args": ["pwd"]}'
+
+# Kill all terminals
+curl -X POST http://localhost:37100 -d '{"command":"workbench.action.terminal.killAll"}'
 ```
 
-The text you need to pass to the `websocket` listener is as you can see a stringified JSON object. The object currently consists of:
+All requests are expected to be in a JSON HTTP request body in the form:
+```json
+{
+  "command": "<command-id>",
+  "args": ["<arg1>", "<arg2>", "...", "<argN>"]
+}
+```
 
-- `Command`: `<command-id>`
+Some VSCode commands expect VSCode's defined types such as [Range](https://code.visualstudio.com/api/references/vscode-api#Range), [Uri](https://code.visualstudio.com/api/references/vscode-api#Uri), [Position](https://code.visualstudio.com/api/references/vscode-api#Position) and [Location](https://code.visualstudio.com/api/references/vscode-api#Location). To accommodate for those, such arguments can be passed as a special types, see the example below which effectively invokes `editor.action.goToLocations` with `Uri`, `Position` and an array of `Location`s:
+
+```json
+{
+  "command": "editor.action.goToLocations",
+  "args": [
+    {
+      "__type__": "Uri",
+      "args": ["/path/to/file.py"]
+    },
+    {
+      "__type__": "Position",
+      "args": [4, 0]
+    },
+    [
+      {
+        "__type__": "Location",
+        "args": [
+          {
+            "__type__": "Uri",
+            "args": ["/path/to/file.py"]
+          },
+          {
+            "__type__": "Position",
+            "args": [11, 5]
+          }
+        ]
+      }
+    ]
+  ]
+}
+```
+
+### Custom defined commands:
+
+As the extension progresses, I plan to add more _special_ commands (i.e. commands that require some use of the [VSCode API](https://code.visualstudio.com/api/references/vscode-api)). For now, we have defined the following commands:
+
+- `custom.goToFileLineCharacter`: allows you to nagivate to a specific position in a file by passing the file path, line and column number as arguments
+
+- `custom.startDebugSession`: allows you to invoke `vscode.debug.startDebugging()` API by passing the workspace folder and a name or definition of a debug configuration
+
+- `custom.runInTerminal`: allows you to invoke commands the currently active integrated terminal
+
 
 ### How do I get the command ID?
 
-To get the command ID, open the `Command Palette` and type `Show all commands`. This will give you a list with all the available commands.
+To get the command ID, open the `Command Palette` and type `Show all commands`. This will give you a list with all the available commands. VScode's built-in commands can be found [here](https://code.visualstudio.com/api/references/commands).
 
 Behind each command, there is a gear button. When you click on it, it brings you to the shortcut configuration. Where you can right-click on the command and copy its ID.
 
-![](assets/command-id.png)
+![how to get the command id](assets/command-id.png)
 
 ## Feedback / issues / ideas
 

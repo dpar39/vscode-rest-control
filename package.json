@@ -38,24 +38,24 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Remote Control: Configuration",
+      "title": "REST Control: Configuration",
       "properties": {
-        "vscodeRestControl.enable": {
+        "restRemoteControl.enable": {
           "type": "boolean",
           "default": true,
           "description": "Specifies if you want enable/disable the remote control globally or for a workspace."
         },
-        "vscodeRestControl.port": {
+        "restRemoteControl.port": {
           "type": "number",
-          "default": 3710,
+          "default": 37100,
           "description": "Specifies the port on which the REST API server will start. If you are using multiple VSCode instances, it is best to set this in your workspace settings."
         },
-        "vscodeRestControl.host": {
+        "restRemoteControl.host": {
           "type": "string",
           "default": "127.0.0.1",
           "description": "Specifies the host to which the REST API server will bind."
         },
-        "vscodeRestControl.fallbacks": {
+        "restRemoteControl.fallbacks": {
           "type": "array",
           "default": [],
           "description": "Allows you to specify fallback ports when the main one is taken."
@@ -63,7 +63,7 @@
       },
       "commands": [
         {
-          "command": "vscodeRestControl.openSettings",
+          "command": "restRemoteControl.openSettings",
           "title": "Remote Control: Open settings"
         }
       ]

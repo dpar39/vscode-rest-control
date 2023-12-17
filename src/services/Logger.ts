@@ -1,8 +1,8 @@
-import { OutputChannel, window } from 'vscode';
+import { OutputChannel, window } from "vscode";
 
 export class Logger {
   private static instance: Logger;
-  public static channel: OutputChannel | null = null; 
+  public static channel: OutputChannel | null = null;
 
   private constructor() {
     const displayName = "Remote Control";
@@ -21,7 +21,9 @@ export class Logger {
       Logger.getInstance();
     }
 
-    Logger.channel?.appendLine(`["${type}" - ${new Date().getHours()}:${new Date().getMinutes()}]  ${message}`);
+    Logger.channel?.appendLine(
+      `["${type}" - ${new Date().getHours()}:${new Date().getMinutes()}]  ${message}`
+    );
   }
 
   public static warning(message: string): void {

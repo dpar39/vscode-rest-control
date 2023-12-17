@@ -1,0 +1,91 @@
+### execute command in terminal
+
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{"command": "custom.runInTerminal", "args": "ls -la"}
+
+### Open a folder
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{"command": "vscode.openFolder", "args": ["/home/ddiaz/tmp"]}
+
+### Open a file 
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{"command": "vscode.open", "args": ["/home/ddiaz/tmp/main.cpp"]}
+
+
+### Open file at line
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{"command": "custom.goToTextPosition", "args": [5, 4]}
+
+
+### Start debugging with a custom configuration
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{
+    "command": "custom.startDebugSession",
+    "args": [
+        "/home/ddiaz/tmp", 
+        {
+            "name": "Run sample.py",
+            "type": "python",
+            "request": "launch",
+            "program": "sample.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}
+
+###
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{
+    "command": "revealLine",
+    "args": [{"lineNumber": 15, "at": "center"}]
+}
+
+###
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{
+    "command": "editor.action.goToLocations",
+    "args": [
+        {
+            "__type__": "Uri",
+            "args": [
+                "/home/ddiaz/vscode-rest-control/src/demo.py"
+            ]
+        },
+        {
+            "__type__": "Position",
+            "args": [4, 0]
+        },
+        [
+            {
+                "__type__": "Location",
+                "args": [
+                    {
+                        "__type__": "Uri",
+                        "args": [
+                            "/home/ddiaz/vscode-rest-control/src/demo.py"
+                        ]
+                    },
+                    {
+                        "__type__": "Position",
+                        "args": [11, 5]
+                    }
+                ]
+            }
+        ]
+    ]
+}
