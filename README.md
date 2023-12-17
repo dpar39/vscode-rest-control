@@ -1,26 +1,28 @@
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=eliostruyf.vscode-remote-control">
-    <img alt="Remote Control" src="./assets/logo.png" height="200">
+  <a href="https://marketplace.visualstudio.com/items?itemName=dpar39.vscode-rest-control">
+    <img alt="REST Control" src="./assets/logo.drawio.png" height="200">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=eliostruyf.vscode-remote-control" title="Check it out on the Visual Studio Marketplace">
-    <img src="https://vscode-marketplace-badge.vercel.app/api/badge/version/eliostruyf.vscode-remote-control" alt="Visual Studio Marketplace" style="display: inline-block" />
+  <a href="https://marketplace.visualstudio.com/items?itemName=dpar39.vscode-rest-control" title="Check it out on the Visual Studio Marketplace">
+    <img src="https://vscode-marketplace-badge.vercel.app/api/badge/version/dpar39.vscode-rest-control" alt="Visual Studio Marketplace" style="display: inline-block" />
   </a>
 
-  <img src="https://vscode-marketplace-badge.vercel.app/api/badge/installs/eliostruyf.vscode-remote-control" alt="Number of installs"  style="display: inline-block;margin-left:10px" />
+  <img src="https://vscode-marketplace-badge.vercel.app/api/badge/installs/dpar39.vscode-rest-control" alt="Number of installs"  style="display: inline-block;margin-left:10px" />
   
-  <img src="https://vscode-marketplace-badge.vercel.app/api/badge/rating/eliostruyf.vscode-remote-control" alt="Ratings" style="display: inline-block;margin-left:10px" />
+  <img src="https://vscode-marketplace-badge.vercel.app/api/badge/rating/dpar39.vscode-rest-control" alt="Ratings" style="display: inline-block;margin-left:10px" />
 
-  <a href="https://www.buymeacoffee.com/zMeFRy9" title="Buy me a coffee" style="margin-left:10px">
-    <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat" alt="Buy me a coffee" style="display: inline-block" />
+  <a href="https://www.buymeacoffee.com/dpar39" title="Buy me a coffee" style="margin-left:10px">
+    <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$3-blue?logo=buy-me-a-coffee&style=flat" alt="Buy me a coffee" style="display: inline-block" />
   </a>
 </p>
 
+**This extension is a fork from [Remote Control](https://github.com/estruyf/vscode-remote-control).** The motivation behind is that while `Remote Control` uses `websockets`, for my use case I can only make HTTP REST calls. In addition, many commands I want to use can't simply be invoked without special handling of the arguments, e.g., `revealRange`, `vscode.open`, etc., as they require newing up instances of specific VSCode objects to work properly.
+
 This extension allows you to remotely control Visual Studio Code. Run commands from anywhere you want on your device. The extension allows you to take VSCode automation to the next level.
 
-In the background it uses `websockets` in order to listen to commands it should execute in your VSCode instance.
+In the background it uses a a simple HTTP server in order to listen to commands it should execute in your VSCode instance.
 
 ![](assets/example.gif)
 
@@ -43,7 +45,7 @@ Once the extension starts, it will show the port number in the status bar. This 
 
 ## Usage
 
-When you install this extension, it will automatically open a `websocket` on port `3710`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `remoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use.
+When you install this extension, it will automatically start a HTTP server on port `3710`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `remoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use.
 
 Once installed, you can execute `commands` for VSCode remotely by calling the Remote Control its websocket. Here is an example how to open the terminal in VSCode:
 
@@ -65,4 +67,4 @@ Behind each command, there is a gear button. When you click on it, it brings you
 
 ## Feedback / issues / ideas
 
-Please submit your feedback/issues/ideas by creating an issue in the project repository: [issue list](https://github.com/estruyf/vscode-remote-control/issues).
+Please submit your feedback/issues/ideas by creating an issue in the project repository: [issue list](https://github.com/dpar39/vscode-rest-control/issues).

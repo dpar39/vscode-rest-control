@@ -1,23 +1,23 @@
 {
-  "name": "vscode-remote-control",
-  "displayName": "Remote Control",
-  "description": "This extension allows you to remotely control Visual Studio Code. Run commands from anywhere you want on your device. The extension allows you to take VSCode automation to the next level.",
-  "publisher": "eliostruyf",
+  "name": "vscode-rest-control",
+  "displayName": "REST Control",
+  "description": "This extension allows you to remotely control Visual Studio Code via a REST endpoint, taking automation to the next level.",
+  "publisher": "dpar39",
   "license": "MIT",
-  "version": "1.5.0",
+  "version": "0.0.1",
   "engines": {
     "vscode": "^1.55.0"
   },
   "badges": [
     {
       "description": "version",
-      "url": "https://img.shields.io/github/package-json/v/estruyf/vscode-remote-control?color=green&label=vscode-remote-control&style=flat-square",
-      "href": "https://github.com/estruyf/vscode-remote-control"
+      "url": "https://img.shields.io/github/package-json/v/dpar39/vscode-rest-control?color=green&label=vscode-rest-control&style=flat-square",
+      "href": "https://github.com/dpar39/vscode-rest-control"
     },
     {
       "description": "Buy me a coffee",
-      "url": "https://img.shields.io/badge/Buy%20me%20a%20coffee-€%203-blue?logo=buy-me-a-coffee&style=flat-square",
-      "href": "https://www.buymeacoffee.com/zMeFRy9"
+      "url": "https://img.shields.io/badge/Buy%20me%20a%20coffee-$3-blue?logo=buy-me-a-coffee&style=flat-square",
+      "href": "https://www.buymeacoffee.com/dpar39"
     }
   ],
   "icon": "assets/logo.png",
@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/estruyf/vscode-remote-control"
+    "url": "https://github.com/dpar39/vscode-rest-control"
   },
   "categories": [
     "Other"
@@ -40,22 +40,22 @@
     "configuration": {
       "title": "Remote Control: Configuration",
       "properties": {
-        "remoteControl.enable": {
+        "vscodeRestControl.enable": {
           "type": "boolean",
           "default": true,
           "description": "Specifies if you want enable/disable the remote control globally or for a workspace."
         },
-        "remoteControl.port": {
+        "vscodeRestControl.port": {
           "type": "number",
           "default": 3710,
-          "description": "Specifies the port on which the websocket server will start. If you are using multiple VSCode instances, it is best to set this in your workspace settings."
+          "description": "Specifies the port on which the REST API server will start. If you are using multiple VSCode instances, it is best to set this in your workspace settings."
         },
-        "remoteControl.host": {
+        "vscodeRestControl.host": {
           "type": "string",
           "default": "127.0.0.1",
-          "description": "Specifies the host to which the websocket server will bind."
+          "description": "Specifies the host to which the REST API server will bind."
         },
-        "remoteControl.fallbacks": {
+        "vscodeRestControl.fallbacks": {
           "type": "array",
           "default": [],
           "description": "Allows you to specify fallback ports when the main one is taken."
@@ -63,7 +63,7 @@
       },
       "commands": [
         {
-          "command": "remoteControl.openSettings",
+          "command": "vscodeRestControl.openSettings",
           "title": "Remote Control: Open settings"
         }
       ]
