@@ -10,8 +10,6 @@
   </a>
 
   <img src="https://vscode-marketplace-badge.vercel.app/api/badge/installs/dpar39.vscode-rest-control" alt="Number of installs"  style="display: inline-block;margin-left:10px" />
-  
-  <img src="https://vscode-marketplace-badge.vercel.app/api/badge/rating/dpar39.vscode-rest-control" alt="Ratings" style="display: inline-block;margin-left:10px" />
 
   <a href="https://www.buymeacoffee.com/dpar39" title="Buy me a coffee" style="margin-left:10px">
     <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$5-blue?logo=buy-me-a-coffee&style=flat" alt="Buy me a coffee" style="display: inline-block" />
@@ -32,7 +30,7 @@ The main motivation behind it was that while `Remote Control` uses `websockets`,
 The extension has the following settings which you can use to configure it:
 
 - `restRemoteControl.enable`: enable/disable this extension
-- `restRemoteControl.host`: the hostname of the websocket server. Default: `127.0.0.1`.
+- `restRemoteControl.host`: the hostname of the HTTP server. Default: `127.0.0.1`.
 - `restRemoteControl.port`: set the port number on which the HTTP server will listen
 - `restRemoteControl.fallbacks`: an array of port numbers to fallback to if the port is already in use.
 
