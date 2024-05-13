@@ -7,13 +7,13 @@ import { ControlRequest } from "../models/controlRequest";
 function createObject(arg: any): any {
   if (typeof arg === "object" && arg.hasOwnProperty("__type__")) {
     const type = arg.__type__;
-    if (type == "Uri") {
+    if (type === "Uri") {
       return vscode.Uri.parse(arg.args[0]);
-    } else if (type == "Position") {
+    } else if (type === "Position") {
       return new vscode.Position(arg.args[0], arg.args[1]);
-    } else if (type == "Range") {
+    } else if (type === "Range") {
       return new vscode.Range(arg.args[0], arg.args[1], arg.args[2], arg.args[3]);
-    } else if (type == "Location") {
+    } else if (type === "Location") {
       return new vscode.Location(createObject(arg.args[0]), createObject(arg.args[1]));
     }
   }
@@ -50,7 +50,7 @@ export async function processRemoteControlRequest(requestObject: ControlRequest)
     throw new Error("No active terminal available");
   }
 
-  if (command == "custom.startDebugSession") {
+  if (command === "custom.startDebugSession") {
     const folder = args[0];
     const debugConfig = args[1];
     const success = await vscode.debug.startDebugging(folder, debugConfig);
@@ -85,18 +85,18 @@ export async function processRemoteControlRequest(requestObject: ControlRequest)
     return await quickPick(args[0]);
   }
 
-  if (command == "custom.goToFileLineCharacter") {
+  if (command === "custom.goToFileLineCharacter") {
     const filePath = args[0];
     let uri = null;
     if (!path.isAbsolute(filePath)) {
       let candidates = await vscode.workspace.findFiles(args[0]);
-      if (candidates.length == 1) {
+      if (candidates.length === 1) {
         uri = candidates[0];
       }
     } else {
       uri = vscode.Uri.file(filePath);
     }
-    if (uri == null) {
+    if (uri === null) {
       throw new Error(`Unable to locate file: ${filePath}`);
     }
     const position = new vscode.Position(args[1] || 0, args[2] || 0);
