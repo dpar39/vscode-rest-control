@@ -8,11 +8,17 @@ import * as vscode from "vscode";
 import { makeRequest } from "./sendPostRequest";
 // import * as myExtension from '../extension';
 
+async function sleep(ms: number): Promise<void> {
+  return new Promise(
+      (resolve) => setTimeout(resolve, ms));
+}
+
 suite("Extension Test Suite", () => {
   suiteSetup(async () => {
     const sampleWorkspace = path.resolve(__dirname, "../../../sampleWorkspace");
     let uri = vscode.Uri.file(sampleWorkspace);
     await vscode.commands.executeCommand("vscode.openFolder", uri);
+    await sleep(3000);
   });
 
   suiteTeardown(() => {});
