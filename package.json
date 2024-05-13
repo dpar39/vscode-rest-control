@@ -50,11 +50,6 @@
           "default": 37100,
           "description": "Specifies the port on which the REST API server will start. If you are using multiple VSCode instances, it is best to set this in your workspace settings."
         },
-        "restRemoteControl.host": {
-          "type": "string",
-          "default": "127.0.0.1",
-          "description": "Specifies the host to which the REST API server will bind."
-        },
         "restRemoteControl.fallbacks": {
           "type": "array",
           "default": [],
