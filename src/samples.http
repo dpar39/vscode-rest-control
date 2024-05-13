@@ -1,28 +1,27 @@
-### execute command in terminal
+### send a message to vscode
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
 
+{"command": "custom.showErrorMessage", "args": ["Make a choice", "Choice 1", "Choice 2"]}
+
+### list installed extensions
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{"command": "custom.listInstalledExtensions", "args": []}
+
+### execute command in terminal
 POST http://localhost:37100 HTTP/1.1
 content-type: application/json
 
 {"command": "custom.runInTerminal", "args": "ls -la"}
-
-### Open a folder
-POST http://localhost:37100 HTTP/1.1
-content-type: application/json
-
-{"command": "vscode.openFolder", "args": ["/home/ddiaz/tmp"]}
-
-### Open a file 
-POST http://localhost:37100 HTTP/1.1
-content-type: application/json
-
-{"command": "vscode.open", "args": ["/home/ddiaz/tmp/main.cpp"]}
 
 
 ### Open file at line
 POST http://localhost:37100 HTTP/1.1
 content-type: application/json
 
-{"command": "custom.goToTextPosition", "args": [5, 4]}
+{"command": "custom.goToFileLineCharacter", "args": ["demo.py", 5, 0]}
 
 
 ### Start debugging with a custom configuration
@@ -32,19 +31,19 @@ content-type: application/json
 {
     "command": "custom.startDebugSession",
     "args": [
-        "/home/ddiaz/tmp", 
+        "${workspaceFolder}", 
         {
             "name": "Run sample.py",
             "type": "python",
             "request": "launch",
-            "program": "sample.py",
+            "program": "demo.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
     ]
 }
 
-###
+### Reveal line in current file
 POST http://localhost:37100 HTTP/1.1
 content-type: application/json
 
@@ -53,7 +52,7 @@ content-type: application/json
     "args": [{"lineNumber": 15, "at": "center"}]
 }
 
-###
+### Go to location (the hard way)
 POST http://localhost:37100 HTTP/1.1
 content-type: application/json
 
@@ -82,10 +81,38 @@ content-type: application/json
                     },
                     {
                         "__type__": "Position",
-                        "args": [11, 5]
+                        "args": [9, 5]
                     }
                 ]
             }
         ]
     ]
+}
+
+### Quick pick between 3 choices
+POST http://localhost:37100 HTTP/1.1
+content-type: application/json
+
+{
+    "command": "custom.showQuickPick",
+    "args": [{
+        "title": "Quick pick example",
+        "defaultLabel": "Third Choice",
+        "canSelectMany": false,
+        "placeHolder": "Select an option",
+        "items": [
+            {
+                "label": "First Choice",
+                "detail": "some detail 1"
+            },
+            {
+                "label": "Second Choice",
+                "detail": "some detail 2"
+            },
+            {
+                "label": "Third Choice",
+                "detail": "some detail 3"
+            }
+        ]
+    }]
 }
