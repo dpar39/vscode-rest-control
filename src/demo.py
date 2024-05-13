@@ -17,17 +17,17 @@ sequence = [
     {"command": "workbench.action.terminal.new"},
     {"command": "custom.runInTerminal", "args": ["ls -la", "date"]},
     {"command": "workbench.action.terminal.killAll"},
-    {"command": "custom.goToFileLineCharacter", "args": [f"{this_dir}/demo.py", 0, 0]},
-    {"command": "custom.goToFileLineCharacter", "args": [f"{this_dir}/demo.py", 37, 19]},
+    {"command": "custom.goToFileLineCharacter", "args": ["demo.py", 0, 0]},
+    {"command": "custom.goToFileLineCharacter", "args": ["demo.py", 37, 19]},
     {
         "command": "custom.startDebugSession",
         "args": [
-            this_dir,
+            "${workspaceFolder}",
             {
                 "name": "Run sample.py",
                 "type": "python",
                 "request": "launch",
-                "program": f"{this_dir}/demo.py",
+                "program": "demo.py",
                 "console": "integratedTerminal",
                 "justMyCode": True,
             },
