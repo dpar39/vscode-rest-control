@@ -1,7 +1,8 @@
 import * as vscode from "vscode";
 import * as tcpPorts from "tcp-port-used";
 import { Logger } from "./services/logger";
-import http, { IncomingMessage, ServerResponse } from "http";
+import { IncomingMessage, ServerResponse } from "http";
+import * as http from "http";
 import { AddressInfo } from "net";
 import { ControlRequest } from "./models/controlRequest";
 import { processRemoteControlRequest } from "./services/requestProcessor";
@@ -9,7 +10,7 @@ import { processRemoteControlRequest } from "./services/requestProcessor";
 let server: http.Server;
 let statusbar: vscode.StatusBarItem;
 
-const EXTENSION_ID: string = "dpar39.vscode-rest-control";
+export const EXTENSION_ID: string = "dpar39.vscode-rest-control";
 const SETTINGS_NAME: string = "restRemoteControl";
 
 const startHttpServer = async (
@@ -47,6 +48,7 @@ const startHttpServer = async (
       const reqData = JSON.parse(body);
       processRemoteControlRequest(reqData as ControlRequest)
         .then((data) => {
+          res.setHeader("Content-Type", "application/json");
           res.write(JSON.stringify(data || {}));
           res.end();
         })
@@ -72,7 +74,6 @@ const startHttpServer = async (
     context.environmentVariableCollection.replace("REMOTE_CONTROL_PORT", `${verifiedPort}`);
     statusbar.text = `$(plug) RC Port: ${verifiedPort}`;
     statusbar.tooltip = listeningMessage;
-
   });
 };
 
@@ -92,7 +93,7 @@ function setupRestControl(context: vscode.ExtensionContext) {
     Logger.info("VSCode REST Control is now active!");
   } else {
     statusbar.tooltip = `REST remote control has been disabled via setting "${SETTINGS_NAME}.enabled": false`;
-    statusbar.text = '$(debug-disconnect) RC Disabled';
+    statusbar.text = "$(debug-disconnect) RC Disabled";
     server?.close();
     Logger.info("VSCode REST Control has been disabled via settings!");
   }

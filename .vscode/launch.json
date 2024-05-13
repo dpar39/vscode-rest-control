@@ -17,7 +17,7 @@
             ]
         },
         {
-            "name": "Extension Tests",
+            "name": "Test Extension",
             "type": "extensionHost",
             "request": "launch",
             "args": [

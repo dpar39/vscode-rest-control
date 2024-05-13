@@ -18,12 +18,11 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Install the dependencies
-        run: npm i
-        
-      # - name: Clone the toolkit
-      #   run: |
-      #     git clone https://github.com/microsoftgraph/microsoft-graph-toolkit
-      #     npm run snippets
+        run: npm install
+      
+      - name: Build and run automation tests
+        run: xvfb-run -a npm run test
 
-      - name: Publish
+      - name: Publish to VSCode Marketplace
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: npx @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
