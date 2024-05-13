@@ -81,14 +81,13 @@ function setupRestControl(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration(SETTINGS_NAME);
   const enabled = config.get<number | null>("enable");
   if (enabled) {
-    const host = config.get<string | null>("host");
     const port = config.get<number | null>("port");
     const fallbackPorts = config.get<number[] | null>("fallbacks");
     startHttpServer(
       context,
-      host || "127.0.0.1",
+      "127.0.0.1",
       port || 37100,
-      (fallbackPorts || []).filter((p) => p !== port)
+      (fallbackPorts || []).filter((p: number) => p !== port)
     );
     Logger.info("VSCode REST Control is now active!");
   } else {
