@@ -7,7 +7,7 @@ import { AddressInfo } from "net";
 import { ControlRequest } from "./models/controlRequest";
 import { processRemoteControlRequest } from "./services/requestProcessor";
 
-let server: http.Server;
+export let server: http.Server;
 let statusbar: vscode.StatusBarItem;
 
 export const EXTENSION_ID: string = "dpar39.vscode-rest-control";
