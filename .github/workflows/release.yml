@@ -27,4 +27,4 @@ jobs:
 
       - name: Publish to VSCode Marketplace
         if: ${{ github.ref == 'refs/heads/main' }}
-        run: npx @vscode/vsce publish -p ${{ secrets.VSCE_PAT }}
+        run: npx @vscode/vsce publish --allow-star-activation -p ${{ secrets.VSCE_PAT }}

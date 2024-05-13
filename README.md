@@ -105,6 +105,10 @@ As the extension progresses, I plan to add more _special_ commands (i.e. command
 
 - `custom.runInTerminal`: allows you to invoke commands the currently active integrated terminal
 
+- `custom.showQuickPick`: show quick pick dialog to collect selection from the user
+
+- `custom.showInformationMessage`, `custom.showWarningMessage` and `custom.showErrorMessage`: Show message dialogs to the user
+
 
 ### How do I get the command ID?
 
