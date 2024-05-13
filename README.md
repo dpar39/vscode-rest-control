@@ -16,7 +16,7 @@
   </a>
 </p>
 
-This extension allows you to remotely control instances of Visual Studio Code by exposing a REST endpoint that you can use to invoke vscode commands. In the background it launches a HTTP server that listen to requests of commands to execute.
+This extension allows you to remotely control instances of Visual Studio Code by exposing a REST endpoint that you can use to invoke vscode commands. In the background it launches a HTTP server that listen on the `localhost` interface for requests of commands to execute.
 
 The demo below shows how we can open a terminal, run some commands in it, then close all terminals, open a file with the cursor in a specified location and finally start a debug session on the same file that is orchestrating it all!
 
@@ -30,13 +30,12 @@ The main motivation behind it was that while `Remote Control` uses `websockets`,
 The extension has the following settings which you can use to configure it:
 
 - `restRemoteControl.enable`: enable/disable this extension
-- `restRemoteControl.host`: the hostname of the HTTP server. Default: `127.0.0.1`.
 - `restRemoteControl.port`: set the port number on which the HTTP server will listen
 - `restRemoteControl.fallbacks`: an array of port numbers to fallback to if the port is already in use.
 
 ## Usage
 
-When you install this extension, it will automatically try to start a HTTP server on port `37100`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `restRemoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use.
+When you install this extension, it will automatically try to start a HTTP server on port `37100`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `restRemoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use. VSCode terminals opened will have environment variable `REMOTE_CONTROL_PORT` set with the port the server is currently listening to.
 
 ![status bar listening message](assets/statusbar-item.png)
 
@@ -100,14 +99,14 @@ Some VSCode commands expect VSCode's defined types such as [Range](https://code.
 As the extension progresses, I plan to add more _special_ commands (i.e. commands that require some use of the [VSCode API](https://code.visualstudio.com/api/references/vscode-api)). For now, we have defined the following commands:
 
 - `custom.goToFileLineCharacter`: allows you to nagivate to a specific position in a file by passing the file path, line and column number as arguments
-
 - `custom.startDebugSession`: allows you to invoke `vscode.debug.startDebugging()` API by passing the workspace folder and a name or definition of a debug configuration
-
 - `custom.runInTerminal`: allows you to invoke commands the currently active integrated terminal
-
 - `custom.showQuickPick`: show quick pick dialog to collect selection from the user
+- `custom.showInformationMessage`, `custom.showWarningMessage` and `custom.showErrorMessage`: show message dialogs to the user and let them click on a button
+- `custom.listInstalledExtensions`: get the list of installed extension IDs
 
-- `custom.showInformationMessage`, `custom.showWarningMessage` and `custom.showErrorMessage`: Show message dialogs to the user
+## To implement in the near future:
+- Add the ability to set a breakpoint at the specified file/line combination
 
 
 ### How do I get the command ID?
