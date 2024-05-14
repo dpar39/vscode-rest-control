@@ -1,6 +1,11 @@
 # Change Log
 
+## [0.0.4]
+
+- Removed npm vulnerabilities
+
 ## [0.0.3]
+
 - Added some more documentation
 - Refactored some code
 
