@@ -19,10 +19,10 @@ suite("Extension Test Suite", () => {
     const workspaceFolders = (await makeRequest("custom.workspaceFolders")) as string[];
     assert(workspaceFolders.length === 1);
     const ws = workspaceFolders[0] as any;
-    assert(ws.name === 'sampleWorkspace');
+    assert(ws.name === 'workspace1');
     assert(ws.index === 0);
     assert(ws.uri.startsWith("file://"));
-    assert(ws.uri.endsWith("/sampleWorkspace"));
+    assert(ws.uri.endsWith("/workspace1"));
   });
 
   test("get all commands registred in vscode", async () => {
