@@ -4,7 +4,7 @@
   "description": "This extension allows you to remotely control Visual Studio Code via a REST endpoint, taking automation to the next level.",
   "publisher": "dpar39",
   "license": "MIT",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.55.0"
   },
@@ -73,7 +73,7 @@
     "test-watch": "tsc -watch -p ./",
     "pretest": "npm run test-compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "xvfb-run -a node ./out/test/runTest.js"
   },
   "devDependencies": {
     "@types/glob": "^7.1.6",
