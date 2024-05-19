@@ -69,6 +69,24 @@ export async function processRemoteControlRequest(requestObject: ControlRequest)
     return vscode.extensions.all.map((e) => e.id);
   }
 
+  if (command === "custom.workspaceFile") {
+    return vscode.workspace.workspaceFile?.toString();
+  }
+
+  if (command === "custom.getCommands") {
+    return await vscode.commands.getCommands();
+  }
+
+  if (command === "custom.workspaceFolders") {
+    return vscode.workspace.workspaceFolders?.map(ws => {
+      return {
+        name: ws.name,
+        index: ws.index,
+        uri: ws.uri.toString(),
+      };
+    });
+  }
+
   if (command === "custom.showInformationMessage") {
     return await vscode.window.showInformationMessage(args[0], ...args.slice(1));
   }

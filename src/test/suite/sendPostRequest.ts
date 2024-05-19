@@ -1,12 +1,13 @@
 import * as http from "http";
+import { getListeningPort } from "../../extension";
 
-export async function makeRequest(command: string, args: any[], port: number = 37100) {
+export async function makeRequest(command: string, args: any[] = [], port: number = 0) {
   return new Promise((resolve, reject) => {
     const req = http.request(
       {
         method: "POST",
         hostname: "localhost",
-        port: port,
+        port: port || getListeningPort(),
         path: "/",
       },
       (res) => {
