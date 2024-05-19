@@ -1,31 +1,45 @@
-### send a message to vscode
-POST http://localhost:37100 HTTP/1.1
+@endpoint = http://localhost:43285
+
+### show a warning message in vscode and get a choice selection
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
-{"command": "custom.showErrorMessage", "args": ["Make a choice", "Choice 1", "Choice 2"]}
+{
+    "command": "custom.showWarningMessage", 
+    "args": ["Make a choice", "Choice 1", "Choice 2"]
+}
 
 ### list installed extensions
-POST http://localhost:37100 HTTP/1.1
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
-{"command": "custom.listInstalledExtensions", "args": []}
+{ "command": "custom.listInstalledExtensions" }
 
-### execute command in terminal
-POST http://localhost:37100 HTTP/1.1
+### get current workspace
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
-{"command": "custom.runInTerminal", "args": "ls -la"}
+{ "command": "custom.workspaceFolders" }
+
+### execute a command in active terminal
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{ "command": "custom.runInTerminal", "args": ["ls -la"] }
 
 
 ### Open file at line
-POST http://localhost:37100 HTTP/1.1
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
-{"command": "custom.goToFileLineCharacter", "args": ["demo.py", 5, 0]}
+{
+    "command": "custom.goToFileLineCharacter", 
+    "args": ["src/test/workspace1/demo.py", 5, 0]
+}
 
 
 ### Start debugging with a custom configuration
-POST http://localhost:37100 HTTP/1.1
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
 {
@@ -44,7 +58,7 @@ content-type: application/json
 }
 
 ### Reveal line in current file
-POST http://localhost:37100 HTTP/1.1
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
 {
@@ -53,7 +67,7 @@ content-type: application/json
 }
 
 ### Go to location (the hard way)
-POST http://localhost:37100 HTTP/1.1
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
 {
@@ -62,7 +76,7 @@ content-type: application/json
         {
             "__type__": "Uri",
             "args": [
-                "/home/ddiaz/vscode-rest-control/src/demo.py"
+                "/abs/path/to/src/test/workspace1/demo.py"
             ]
         },
         {
@@ -90,7 +104,7 @@ content-type: application/json
 }
 
 ### Quick pick between 3 choices
-POST http://localhost:37100 HTTP/1.1
+POST {{endpoint}} HTTP/1.1
 content-type: application/json
 
 {
@@ -115,4 +129,31 @@ content-type: application/json
             }
         ]
     }]
+}
+
+### install an extension
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{
+    "command": "workbench.extensions.installExtension",
+    "args": ["dpar39.vscode-taef-test-adapter"]
+}
+
+### uninstall an extension
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{
+    "command": "workbench.extensions.uninstallExtension",
+    "args": ["dpar39.vscode-taef-test-adapter"]
+}
+
+### developer: reload window
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{
+    "command": "workbench.action.reloadWindow",
+    "args": []
 }

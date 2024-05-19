@@ -30,7 +30,6 @@ const startHttpServer = async (
   host: string,
   port: number,
   fallbackPorts: number[],
-  showNotification: boolean = false
 ): Promise<void> => {
   let isInUse = false;
   if (port) {
@@ -39,7 +38,7 @@ const startHttpServer = async (
       if (fallbackPorts.length > 0) {
         const nextPort = fallbackPorts.shift();
         if (nextPort) {
-          startHttpServer(context, host, nextPort, fallbackPorts, true);
+          startHttpServer(context, host, nextPort, fallbackPorts);
           return;
         } else {
           isInUse = true;
