@@ -13,7 +13,7 @@ async function main() {
     const extensionTestsPath = path.resolve(__dirname, "./suite/index");
 
     // Get the directory path to a sample workspace
-    const workspace1 = path.resolve(__dirname, "./workspace1");
+    const workspace1 = path.resolve(extensionDevelopmentPath, "src/test/workspace1");
 
     // VSCode launch arguments
     const launchArgs = [workspace1];

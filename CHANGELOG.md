@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.5]
+
+- Added `custom.workspaceFile` and `custom.workspaceFolders` to retrieve the workspace file (if any) and folders currently opened in the workspace (if any)
+
+- Added `custom.getCommands` to retrieve the full list of commands registered within vscode
+
 ## [0.0.4]
 
 - Removed npm vulnerabilities

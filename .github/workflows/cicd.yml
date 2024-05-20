@@ -1,4 +1,4 @@
-name: Release
+name: CI/CD pipeline
 on:
   pull_request:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: "Build and release"
+    name: "Build, test and release"
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +22,7 @@ jobs:
         run: npm install
       
       - name: Build and run automation tests
-        run: xvfb-run -a npm run test
+        run: npm run test
 
       - name: Publish to VSCode Marketplace
         if: ${{ github.ref == 'refs/heads/main' }}

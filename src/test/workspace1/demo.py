@@ -4,7 +4,9 @@ from urllib import request
 from time import sleep
 
 
-def post_data(data, url="http://localhost:37100"):
+def post_data(data):
+    port = os.environ.get("REMOTE_CONTROL_PORT", "37100")
+    url = f"http://localhost:{port}"
     body = json.dumps(data).encode("utf-8")
     headers = {"Content-Type": "application/json"}
     req = request.Request(url, body, headers)

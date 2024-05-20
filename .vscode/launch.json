@@ -21,7 +21,7 @@
             "type": "extensionHost",
             "request": "launch",
             "args": [
-                "${workspaceFolder}/test/workspace1",
+                "${workspaceFolder}/src/test/workspace1",
                 "--extensionDevelopmentPath=${workspaceFolder}",
                 "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
             ],

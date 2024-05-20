@@ -1,4 +1,4 @@
-@endpoint = http://localhost:43285
+@endpoint = http://localhost:37100
 
 ### show a warning message in vscode and get a choice selection
 POST {{endpoint}} HTTP/1.1
