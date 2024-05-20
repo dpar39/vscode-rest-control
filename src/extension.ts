@@ -60,7 +60,7 @@ const startHttpServer = async (
       processRemoteControlRequest(reqData as ControlRequest)
         .then((data) => {
           res.setHeader("Content-Type", "application/json");
-          res.write(JSON.stringify(data || {}));
+          res.write(JSON.stringify(data || null));
           res.end();
         })
         .catch((err) => {

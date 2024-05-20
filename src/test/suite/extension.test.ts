@@ -23,6 +23,9 @@ suite("Extension Test Suite", () => {
     assert(ws.index === 0);
     assert(ws.uri.startsWith("file://"));
     assert(ws.uri.endsWith("/workspace1"));
+
+    const workspaceFile = await makeRequest("custom.workspaceFile") as any;
+    assert(workspaceFile === null); // no workspace file
   });
 
   test("get all commands registred in vscode", async () => {
