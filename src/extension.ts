@@ -22,7 +22,16 @@ export function getListeningPort(): number | undefined {
 const SETTINGS_NAME: string = "restRemoteControl";
 
 function setRemoteControlEnvironmentVariable(context: vscode.ExtensionContext, port: number = 0) {
-  context.environmentVariableCollection.replace("REMOTE_CONTROL_PORT", port ? `${port}` : '');
+  const RC_PORT_ENVVAR_NAME = "REMOTE_CONTROL_PORT";
+  if (port === 0) {
+    context.environmentVariableCollection.delete(RC_PORT_ENVVAR_NAME);
+  } else {
+    context.environmentVariableCollection.replace(RC_PORT_ENVVAR_NAME, port.toString());
+  }
+  const terminalUpdateCommand = port === 0 ? `unset ${RC_PORT_ENVVAR_NAME}` : `export ${RC_PORT_ENVVAR_NAME}=${port}`;
+  vscode.window.terminals.map(terminal => {
+    terminal.sendText(terminalUpdateCommand);
+  });
 }
 
 const startHttpServer = async (

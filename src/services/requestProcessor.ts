@@ -69,6 +69,15 @@ export async function processRemoteControlRequest(requestObject: ControlRequest)
     return vscode.extensions.all.map((e) => e.id);
   }
 
+  if (command === "custom.getExtensionInfo") {
+    const extensionId = args[0];
+    const extension = vscode.extensions.all.find((e) => e.id === extensionId);
+    if (!extension) {
+      throw new Error(`Extension with id=${extensionId} was not found`);
+    }
+    return extension;
+  }
+
   if (command === "custom.workspaceFile") {
     return vscode.workspace.workspaceFile?.toString();
   }
