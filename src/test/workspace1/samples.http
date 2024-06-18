@@ -15,7 +15,19 @@ content-type: application/json
 
 { "command": "custom.listInstalledExtensions" }
 
-### get current workspace
+### get extension details
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{ "command": "custom.getExtensionInfo", "args": ["dpar39.vscode-rest-control"] }
+
+### get current workspace file
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{ "command": "custom.workspaceFile" }
+
+### get current workspace folders
 POST {{endpoint}} HTTP/1.1
 content-type: application/json
 

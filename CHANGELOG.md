@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.6]
+
+- Added `custom.getExtensionInfo` to get specific information about an extension by passing the extension ID as parameter. Use `custom.listInstalledExtensions`to list all installed extensions.
+
 ## [0.0.5]
 
 - Added `custom.workspaceFile` and `custom.workspaceFolders` to retrieve the workspace file (if any) and folders currently opened in the workspace (if any)
