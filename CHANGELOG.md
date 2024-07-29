@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.7]
+
+- Added `custom.showInputBox` to show input box dialog to collect a input string from the user
+
 ## [0.0.6]
 
 - Added `custom.getExtensionInfo` to get specific information about an extension by passing the extension ID as parameter. Use `custom.listInstalledExtensions`to list all installed extensions.
