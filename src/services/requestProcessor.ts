@@ -112,6 +112,10 @@ export async function processRemoteControlRequest(requestObject: ControlRequest)
     return await quickPick(args[0]);
   }
 
+  if (command === "custom.showInputBox") {
+    return await vscode.window.showInputBox(args[0]);
+  } 
+
   if (command === "custom.goToFileLineCharacter") {
     const filePath = args[0];
     let uri = null;

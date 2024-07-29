@@ -169,3 +169,16 @@ content-type: application/json
     "command": "workbench.action.reloadWindow",
     "args": []
 }
+
+### Show input box and collect response
+POST {{endpoint}} HTTP/1.1
+content-type: application/json
+
+{
+    "command": "custom.showInputBox",
+    "args": [{
+        "title": "Collect user info",
+        "value": "replace me please",
+        "placeHolder": "Enter some text here"
+    }]
+}
