@@ -4,7 +4,7 @@
   "description": "This extension allows you to remotely control Visual Studio Code via a REST endpoint, taking automation to the next level.",
   "publisher": "dpar39",
   "license": "MIT",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "engines": {
     "vscode": "^1.55.0"
   },
@@ -47,8 +47,8 @@
         },
         "restRemoteControl.port": {
           "type": "number",
-          "default": 37100,
-          "description": "Specifies the port on which the REST API server will start. If you are using multiple VSCode instances, it is best to set this in your workspace settings."
+          "default": 0,
+          "description": "Specifies the port on which the REST API server will start. If not specified, it will pick one based on a hash of the current workspace path if possible."
         },
         "restRemoteControl.fallbacks": {
           "type": "array",

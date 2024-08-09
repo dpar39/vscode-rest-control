@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.8]
+
+- Assign the remote control port based on a hash of the path to the workspace or open folders if such port is available.
+
 ## [0.0.7]
 
 - Added `custom.showInputBox` to show input box dialog to collect a input string from the user

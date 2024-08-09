@@ -28,9 +28,12 @@ function setRemoteControlEnvironmentVariable(context: vscode.ExtensionContext, p
   } else {
     context.environmentVariableCollection.replace(RC_PORT_ENVVAR_NAME, port.toString());
   }
-  const terminalUpdateCommand = port === 0 ? `unset ${RC_PORT_ENVVAR_NAME}` : `export ${RC_PORT_ENVVAR_NAME}=${port}`;
-  vscode.window.terminals.map(terminal => {
-    terminal.sendText(terminalUpdateCommand);
+  const terminalUpdateCommand =
+    port === 0 ? `unset ${RC_PORT_ENVVAR_NAME}` : `export ${RC_PORT_ENVVAR_NAME}=${port}`;
+  vscode.window.terminals.map((terminal) => {
+    if (terminal.exitStatus) {
+      terminal.sendText(terminalUpdateCommand);
+    }
   });
 }
 
@@ -38,7 +41,7 @@ const startHttpServer = async (
   context: vscode.ExtensionContext,
   host: string,
   port: number,
-  fallbackPorts: number[],
+  fallbackPorts: number[]
 ): Promise<void> => {
   let isInUse = false;
   if (port) {
@@ -97,6 +100,21 @@ const startHttpServer = async (
   });
 };
 
+function getDefaultPortForWorkspace(): number {
+  const identifier = vscode.workspace.workspaceFile
+    ? vscode.workspace.workspaceFile.toString()
+    : vscode.workspace.workspaceFolders?.join("");
+  if (!identifier) {
+    return 37100;
+  }
+  const hash = identifier.split("").reduce((a: number, b: string) => {
+    a = (a << 5) - a + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+  const port = 37100 + (Math.abs(hash) % 900);
+  return port;
+}
+
 function setupRestControl(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration(SETTINGS_NAME);
   const enabled = config.get<number | null>("enable");
@@ -106,7 +124,7 @@ function setupRestControl(context: vscode.ExtensionContext) {
     startHttpServer(
       context,
       "127.0.0.1",
-      port || 37100,
+      port || getDefaultPortForWorkspace(),
       (fallbackPorts || []).filter((p: number) => p !== port)
     );
     Logger.info("VSCode REST Control is now active!");
