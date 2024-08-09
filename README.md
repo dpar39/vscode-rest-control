@@ -12,7 +12,7 @@
   <img src="https://vscode-marketplace-badge.vercel.app/api/badge/installs/dpar39.vscode-rest-control" alt="Number of installs"  style="display: inline-block;margin-left:10px" />
 
   <a href="https://www.buymeacoffee.com/dpar39" title="Buy me a coffee" style="margin-left:10px">
-    <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$5-blue?logo=buy-me-a-coffee&style=flat" alt="Buy me a coffee" style="display: inline-block" />
+    <img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-$3-blue?logo=buy-me-a-coffee&style=flat" alt="Buy me a coffee" style="display: inline-block" />
   </a>
 </p>
 
@@ -30,17 +30,17 @@ The main motivation behind it was that while `Remote Control` uses `websockets`,
 The extension has the following settings which you can use to configure it:
 
 - `restRemoteControl.enable`: enable/disable this extension
-- `restRemoteControl.port`: set the port number on which the HTTP server will listen
+- `restRemoteControl.port`: set the port number on which the HTTP server will listen, otherwise the extension will pick one available port for you based on the current workspace path.
 - `restRemoteControl.fallbacks`: an array of port numbers to fallback to if the port is already in use.
 
 ## Usage
 
-When you install this extension, it will automatically try to start a HTTP server on port `37100`. This port can be changed on in the VSCode settings. When you are going to use multiple VSCode sessions at the same time, it is best to configure it on workspace level or use the `restRemoteControl.fallbacks` setting to specify fallback ports when the previous one is already in use. VSCode terminals opened will have environment variable `REMOTE_CONTROL_PORT` set with the port the server is currently listening to.
+When you install this extension, it will automatically try to start a HTTP server. The port can be specified with VSCode setting `restRemoteControl.port`. When you are going to use multiple VSCode sessions at the same time, it is best to configure it at workspace level or use the `restRemoteControl.fallbacks` setting to specify fallback ports when the specified one is already in use. VSCode terminals opened will have environment variable `REMOTE_CONTROL_PORT` set with the port the server is currently listening on.
 
 ![status bar listening message](assets/statusbar-item.png)
 
 
-Once installed, you can execute vscode `commands` by making HTTP requests. Here are few examples using `curl`:
+Once installed, you can execute vscode `commands` by making HTTP requests. Here are few examples using `curl`, assuming VSCode is listening on port `37100`:
 
 ```bash
 # Create a new terminal
