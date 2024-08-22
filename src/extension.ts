@@ -63,6 +63,7 @@ const startHttpServer = async (
   const endBadRequest = (err: any, res: ServerResponse) => {
     res.statusCode = 400;
     const errStringJson = JSON.stringify(err, Object.getOwnPropertyNames(err));
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.write(errStringJson);
     res.end();
     Logger.error(errStringJson);
