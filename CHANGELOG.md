@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.9]
+
+- Add support for processing URL encoded requests in the form `?command=value&args=urlencoded-of-json-representation-of-args`.
+
 ## [0.0.8]
 
 - Assign the remote control port based on a hash of the path to the workspace or open folders if such port is available.

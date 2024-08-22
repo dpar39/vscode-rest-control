@@ -4,7 +4,6 @@ import { Logger } from "./services/logger";
 import { IncomingMessage, ServerResponse } from "http";
 import * as http from "http";
 import { AddressInfo } from "net";
-import { ControlRequest } from "./models/controlRequest";
 import { processRemoteControlRequest } from "./services/requestProcessor";
 
 let server: http.Server;
@@ -61,27 +60,49 @@ const startHttpServer = async (
     }
   }
 
+  const endBadRequest = (err: any, res: ServerResponse) => {
+    res.statusCode = 400;
+    const errStringJson = JSON.stringify(err, Object.getOwnPropertyNames(err));
+    res.write(errStringJson);
+    res.end();
+    Logger.error(errStringJson);
+  };
+
+  const processRequest = (cmd: string, args: string[], res: ServerResponse) => {
+    processRemoteControlRequest(cmd, args)
+      .then((data) => {
+        res.setHeader("Content-Type", "application/json");
+        res.write(JSON.stringify(data || null));
+        res.end();
+      })
+      .catch((err) => endBadRequest(err, res));
+  };
+
   const requestHandler = (req: IncomingMessage, res: ServerResponse) => {
     let body = "";
+    let controlCommand: any = {};
+    if (req.url && req.url.indexOf("?") >= 0) {
+      const url = new URL(req.url, `http://${req.headers.host}/`);
+      const queryParams = new URLSearchParams(url.search);
+      try {
+        const cmd = queryParams.get("command");
+        const args = queryParams.has("args")
+          ? JSON.parse(decodeURIComponent(queryParams.get("args")!))
+          : [];
+        Logger.info(`Remote request command=${cmd}, args=${args}`);
+        processRequest(cmd!, args, res);
+      } catch (err) {
+        endBadRequest(err, res);
+      }
+    }
+
     req.on("data", (chunk) => {
       body += chunk;
     });
     req.on("end", () => {
       Logger.info(`Remote request payload: ${body}`);
-      const reqData = JSON.parse(body);
-      processRemoteControlRequest(reqData as ControlRequest)
-        .then((data) => {
-          res.setHeader("Content-Type", "application/json");
-          res.write(JSON.stringify(data || null));
-          res.end();
-        })
-        .catch((err) => {
-          res.statusCode = 400;
-          const errStringJson = JSON.stringify(err, Object.getOwnPropertyNames(err));
-          res.write(errStringJson);
-          res.end();
-          Logger.error(errStringJson);
-        });
+      const reqData = body ? JSON.parse(body) : controlCommand;
+      processRequest(reqData.command, reqData.args || [], res);
     });
   };
   // Start the HTTP server

@@ -40,17 +40,20 @@ When you install this extension, it will automatically try to start a HTTP serve
 ![status bar listening message](assets/statusbar-item.png)
 
 
-Once installed, you can execute vscode `commands` by making HTTP requests. Here are few examples using `curl`, assuming VSCode is listening on port `37100`:
+Once installed, you can execute vscode `commands` by making HTTP requests. The HTTP verb is currently ignored. Here are few examples using `curl`, assuming VSCode is listening on port `37100`:
 
 ```bash
 # Create a new terminal
-curl -X POST http://localhost:37100 -d '{"command":"workbench.action.terminal.new"}'
+curl http://localhost:37100 -d '{"command":"workbench.action.terminal.new"}' 
+# or curl http://localhost:37100/?command=workbench.action.terminal.new
 
 # Run `pwd` in the currently active terminal
-curl -X POST http://localhost:37100 -d '{"command":"custom.runInTerminal", "args": ["pwd"]}'
+curl http://localhost:37100 -d '{"command":"custom.runInTerminal", "args": ["pwd"]}'
+# or curl http://localhost:37100/?command=custom.runInTerminal&args=%5B%22pwd%22%5D
 
 # Kill all terminals
-curl -X POST http://localhost:37100 -d '{"command":"workbench.action.terminal.killAll"}'
+curl http://localhost:37100 -d '{"command":"workbench.action.terminal.killAll"}'
+# or curl http://localhost:37100/?command=workbench.action.terminal.killAll
 ```
 
 All requests are expected to be in a JSON HTTP request body in the form:
@@ -60,6 +63,7 @@ All requests are expected to be in a JSON HTTP request body in the form:
   "args": ["<arg1>", "<arg2>", "...", "<argN>"]
 }
 ```
+or URL encoded as `?command=<command-id>&args=<url-encoded-of-json-string-of-args>`.
 
 Some VSCode commands expect VSCode's defined types such as [Range](https://code.visualstudio.com/api/references/vscode-api#Range), [Uri](https://code.visualstudio.com/api/references/vscode-api#Uri), [Position](https://code.visualstudio.com/api/references/vscode-api#Position) and [Location](https://code.visualstudio.com/api/references/vscode-api#Location). To accommodate for those, such arguments can be passed as a special types, see the example below which effectively invokes `editor.action.goToLocations` with `Uri`, `Position` and an array of `Location`s:
 
