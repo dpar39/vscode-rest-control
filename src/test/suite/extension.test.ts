@@ -24,7 +24,7 @@ suite("Extension Test Suite", () => {
     assert(ws.uri.startsWith("file://"));
     assert(ws.uri.endsWith("/workspace1"));
 
-    const workspaceFile = await makeRequest("custom.workspaceFile") as any;
+    const workspaceFile = await makeRequest("custom.workspaceFile", undefined, undefined, false) as any;
     assert(workspaceFile === null); // no workspace file
   });
 

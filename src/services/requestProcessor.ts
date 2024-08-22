@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 
 import { quickPick } from "./quickPick";
-import { ControlRequest } from "../models/controlRequest";
 
 function createObject(arg: any): any {
   if (typeof arg === "object" && arg.hasOwnProperty("__type__")) {
@@ -34,10 +33,7 @@ function createArguments(args?: any[]): any[] {
   return args2;
 }
 
-export async function processRemoteControlRequest(requestObject: ControlRequest): Promise<any> {
-  const command = requestObject.command;
-  const args = createArguments(requestObject.args);
-
+export async function processRemoteControlRequest(command: string, args: any[]): Promise<any> {
   if (command === "custom.runInTerminal") {
     const terminal = vscode.window.activeTerminal;
     if (terminal) {
