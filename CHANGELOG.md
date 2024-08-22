@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.10]
+
+- Added `Access-Control-Allow-Origin: *` response header to allow calling VSCode REST Control from web browsers.
+
 ## [0.0.9]
 
 - Add support for processing URL encoded requests in the form `?command=value&args=urlencoded-of-json-representation-of-args`.
