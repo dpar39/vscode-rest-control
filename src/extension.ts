@@ -73,6 +73,7 @@ const startHttpServer = async (
     processRemoteControlRequest(cmd, args)
       .then((data) => {
         res.setHeader("Content-Type", "application/json");
+        res.setHeader("Access-Control-Allow-Origin", "*");
         res.write(JSON.stringify(data || null));
         res.end();
       })
