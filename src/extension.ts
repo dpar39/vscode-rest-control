@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import * as tcpPorts from "tcp-port-used";
+import * as fs from "fs";
 import { Logger } from "./services/logger";
-import { IncomingMessage, ServerResponse } from "http";
-import * as http from "http";
+import { IncomingMessage, ServerResponse, Server, createServer } from "http";
 import { AddressInfo } from "net";
 import { processRemoteControlRequest } from "./services/requestProcessor";
 
-let server: http.Server;
+let server: Server;
 let statusbar: vscode.StatusBarItem;
 
 export const EXTENSION_ID: string = "dpar39.vscode-rest-control";
@@ -108,7 +108,7 @@ const startHttpServer = async (
     });
   };
   // Start the HTTP server
-  server = http.createServer(requestHandler);
+  server = createServer(requestHandler);
 
   server.listen(isInUse ? 0 : port, host, () => {
     const address = server.address();
@@ -116,6 +116,7 @@ const startHttpServer = async (
     const listeningMessage = `REST Control: Listening on "http://${host}:${verifiedPort}"`;
 
     Logger.info(listeningMessage);
+    saveTcpPortProcessPid(context, verifiedPort);
     // set the remote control port as an environment variable
     setRemoteControlEnvironmentVariable(context, verifiedPort);
     statusbar.text = `$(plug) RC Port: ${verifiedPort}`;
@@ -138,16 +139,55 @@ function getDefaultPortForWorkspace(): number {
   return port;
 }
 
+function httpPortToPid(context: vscode.ExtensionContext, port: number): string {
+  const cacheDir = context.globalStorageUri.fsPath;
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
+  return cacheDir + "/" + port + ".pid";
+}
+
+function killPreviousProcessIfUsingTcpPort(
+  context: vscode.ExtensionContext,
+  port: number | undefined
+) {
+  Logger.info(`Checking if we need to kill previous process using port = ${port}`);
+  if (!port) {
+    return;
+  }
+  const portFile = httpPortToPid(context, port!);
+  if (fs.existsSync(portFile)) {
+    try {
+      const pid = fs.readFileSync(portFile, "utf-8");
+      Logger.info(`Found previous PID=${pid} for HTTP port ${port}`);
+      process.kill(parseInt(pid));
+    } catch (e) {
+      Logger.warning(`Unable to kill process specified in ${portFile}`);
+    }
+    fs.unlinkSync(portFile);
+  }
+}
+function saveTcpPortProcessPid(context: vscode.ExtensionContext, port: number | undefined) {
+  if (!port) {
+    Logger.warning(`HTTP port is ${port} - a port should have been selected.`);
+  }
+  const pid = process.pid;
+  Logger.info(`Saving PID=${pid} as currently using HTTP port ${port}`);
+  const portFile = httpPortToPid(context, port!);
+  fs.writeFileSync(portFile, pid.toString());
+}
+
 function setupRestControl(context: vscode.ExtensionContext) {
   const config = vscode.workspace.getConfiguration(SETTINGS_NAME);
   const enabled = config.get<number | null>("enable");
   if (enabled) {
-    const port = config.get<number | null>("port");
+    const port = config.get<number | null>("port") || getDefaultPortForWorkspace();
+    killPreviousProcessIfUsingTcpPort(context, port);
     const fallbackPorts = config.get<number[] | null>("fallbacks");
     startHttpServer(
       context,
       "127.0.0.1",
-      port || getDefaultPortForWorkspace(),
+      port,
       (fallbackPorts || []).filter((p: number) => p !== port)
     );
     Logger.info("VSCode REST Control is now active!");
