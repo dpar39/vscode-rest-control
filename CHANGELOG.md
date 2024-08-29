@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.12]
+
+- Bug Fix: When executing command "Developer: Reload Window", the previous TCP port could not be reused because the old extension process was not kill. Now it saves the PID and kills it the next time the extension is activated.
+
 ## [0.0.11]
 
 - Bug Fix for `Access-Control-Allow-Origin: *` response header to allow calling VSCode REST Control from web browsers.
