@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.13]
+
+- Bug Fix: VSCode folder to port hashing algorithm was not working correctly.
+
 ## [0.0.12]
 
 - Bug Fix: When executing command "Developer: Reload Window", the previous TCP port could not be reused because the old extension process was not kill. Now it saves the PID and kills it the next time the extension is activated.
