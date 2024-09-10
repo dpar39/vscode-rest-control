@@ -127,7 +127,7 @@ const startHttpServer = async (
 function getDefaultPortForWorkspace(): number {
   const identifier = vscode.workspace.workspaceFile
     ? vscode.workspace.workspaceFile.toString()
-    : vscode.workspace.workspaceFolders?.join("");
+    : vscode.workspace.workspaceFolders?.map(f => f.uri.toString()).join("");
   if (!identifier) {
     return 37100;
   }
@@ -135,7 +135,7 @@ function getDefaultPortForWorkspace(): number {
     a = (a << 5) - a + b.charCodeAt(0);
     return a & a;
   }, 0);
-  const port = 37100 + (Math.abs(hash) % 900);
+  const port = 37100 + (Math.abs(hash) % (65535-37100));
   return port;
 }
 
@@ -147,7 +147,7 @@ function httpPortToPid(context: vscode.ExtensionContext, port: number): string {
   return cacheDir + "/" + port + ".pid";
 }
 
-function killPreviousProcessIfUsingTcpPort(
+function killPreviousVscodeProcessIfUsingTcpPort(
   context: vscode.ExtensionContext,
   port: number | undefined
 ) {
@@ -182,7 +182,7 @@ function setupRestControl(context: vscode.ExtensionContext) {
   const enabled = config.get<number | null>("enable");
   if (enabled) {
     const port = config.get<number | null>("port") || getDefaultPortForWorkspace();
-    killPreviousProcessIfUsingTcpPort(context, port);
+    killPreviousVscodeProcessIfUsingTcpPort(context, port);
     const fallbackPorts = config.get<number[] | null>("fallbacks");
     startHttpServer(
       context,
