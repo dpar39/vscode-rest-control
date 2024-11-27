@@ -4,7 +4,7 @@
   "description": "This extension allows you to remotely control Visual Studio Code via a REST endpoint, taking automation to the next level.",
   "publisher": "dpar39",
   "license": "MIT",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "engines": {
     "vscode": "^1.55.0"
   },
@@ -30,7 +30,8 @@
     "url": "https://github.com/dpar39/vscode-rest-control"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Formatters"
   ],
   "activationEvents": [
     "*"
