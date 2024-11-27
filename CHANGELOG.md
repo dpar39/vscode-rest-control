@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.14]
+
+- Added `custom.registerExternalFormatter` to support external formatters that send code snippets to a HTTP endpoint.
+- Added more flexibility to `custom.goToFileLineCharacter` to handle file paths that include row and column number separated with colon `:` (e.g. `readme.txt:42:7`)
+
 ## [0.0.13]
 
 - Bug Fix: VSCode folder to port hashing algorithm was not working correctly.

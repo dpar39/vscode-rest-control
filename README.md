@@ -54,6 +54,9 @@ curl http://localhost:37100 -d '{"command":"custom.runInTerminal", "args": ["pwd
 # Kill all terminals
 curl http://localhost:37100 -d '{"command":"workbench.action.terminal.killAll"}'
 # or curl http://localhost:37100/?command=workbench.action.terminal.killAll
+
+# Register an external formatter endpoint available at http://localhost:12345 that accepts POST requests and formats C++ and Python code
+curl http://localhost:37100 -d '{"command":"custom.registerExternalFormatter", "args":["http://localhost:12345", ["cpp", "python"], "POST"]}'
 ```
 
 All requests are expected to be in a JSON HTTP request body in the form:
@@ -110,6 +113,7 @@ As the extension progresses, I plan to add more _special_ commands (i.e. command
 - `custom.showInformationMessage`, `custom.showWarningMessage` and `custom.showErrorMessage`: show message dialogs to the user and let them click on a button
 - `custom.listInstalledExtensions`: get the list of installed extension IDs
 - `custom.getExtensionInfo`: get details of an installed extension by passing the extension ID
+- `custom.registerExternalFormatter`: registers an external formatter via a HTTP endpoint. The HTTP endpoint will receive a JSON body with the following properties`{"file": "<document file path>", "snippet": "<content to be formatted>", "language": "<language id of the current file>"}` and it should return in the body the formatted code snippet (or the original if the code can't be formatted).
 
 ## To implement in the near future:
 - Add the ability to set a breakpoint at the specified file/line combination
