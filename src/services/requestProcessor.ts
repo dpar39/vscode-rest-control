@@ -143,7 +143,7 @@ export async function processRemoteControlRequest(command: string, args: any[]):
   }
 
   if (command === "custom.registerExternalFormatter") {
-    return await registerExternalFormatter(args[0], args[1], args[2]);
+    return await registerExternalFormatter(args[0], args[1], args[2], args[3]);
   }
 
   // try to run an arbitrary command with the arguments provided as is
