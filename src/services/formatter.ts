@@ -3,13 +3,18 @@ import * as http from "http";
 import * as https from "https";
 
 let formatterRegistration: vscode.Disposable;
+const defaultErrorMessage =
+  "Error sending request to the external formatter. Make sure the formatter HTTP endpoint is up and running.";
 export async function registerExternalFormatter(
   formatterEndpoint: string,
   languages: string[],
-  httpMethod: string
+  httpMethod: string,
+  onErrorMessage: string
 ) {
   languages = languages || (await vscode.languages.getLanguages());
   httpMethod = httpMethod || "POST";
+  onErrorMessage = onErrorMessage || defaultErrorMessage;
+
   if (formatterRegistration) {
     formatterRegistration.dispose();
   }
@@ -54,6 +59,11 @@ export async function registerExternalFormatter(
               "OK"
             );
           });
+        });
+        req.on("error", (err) => {
+          req.destroy();
+          accept([]); // no edits
+          vscode.window.showErrorMessage(`${onErrorMessage} - ${err}`, "OK");
         });
         req.write(payload);
         req.end();
