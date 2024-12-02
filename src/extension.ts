@@ -40,7 +40,7 @@ const startHttpServer = async (
   context: vscode.ExtensionContext,
   host: string,
   port: number,
-  fallbackPorts: number[]
+  fallbackPorts: number[],
 ): Promise<void> => {
   let isInUse = false;
   if (port) {
@@ -127,7 +127,7 @@ const startHttpServer = async (
 function getDefaultPortForWorkspace(): number {
   const identifier = vscode.workspace.workspaceFile
     ? vscode.workspace.workspaceFile.toString()
-    : vscode.workspace.workspaceFolders?.map(f => f.uri.toString()).join("");
+    : vscode.workspace.workspaceFolders?.map((f) => f.uri.toString()).join("");
   if (!identifier) {
     return 37100;
   }
@@ -135,7 +135,7 @@ function getDefaultPortForWorkspace(): number {
     a = (a << 5) - a + b.charCodeAt(0);
     return a & a;
   }, 0);
-  const port = 37100 + (Math.abs(hash) % (65535-37100));
+  const port = 37100 + (Math.abs(hash) % (65535 - 37100));
   return port;
 }
 
@@ -149,7 +149,7 @@ function httpPortToPid(context: vscode.ExtensionContext, port: number): string {
 
 function killPreviousVscodeProcessIfUsingTcpPort(
   context: vscode.ExtensionContext,
-  port: number | undefined
+  port: number | undefined,
 ) {
   Logger.info(`Checking if we need to kill previous process using port = ${port}`);
   if (!port) {
@@ -188,7 +188,7 @@ function setupRestControl(context: vscode.ExtensionContext) {
       context,
       "127.0.0.1",
       port,
-      (fallbackPorts || []).filter((p: number) => p !== port)
+      (fallbackPorts || []).filter((p: number) => p !== port),
     );
     Logger.info("VSCode REST Control is now active!");
   } else {

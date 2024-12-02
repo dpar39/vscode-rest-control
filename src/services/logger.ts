@@ -22,7 +22,7 @@ export class Logger {
     }
 
     Logger.channel?.appendLine(
-      `["${type}" - ${new Date().getHours()}:${new Date().getMinutes()}]  ${message}`
+      `["${type}" - ${new Date().getHours()}:${new Date().getMinutes()}]  ${message}`,
     );
   }
 
