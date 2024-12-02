@@ -58,8 +58,7 @@ export async function processRemoteControlRequest(command: string, args: any[]):
   }
 
   if (command === "custom.eval") {
-    eval(args[0]);
-    return;
+    return eval(args[0]);
   }
 
   if (command === "custom.listInstalledExtensions") {
@@ -125,7 +124,7 @@ export async function processRemoteControlRequest(command: string, args: any[]):
     }
     let uri = null;
     if (!path.isAbsolute(filePath)) {
-      let candidates = await vscode.workspace.findFiles(args[0]);
+      let candidates = await vscode.workspace.findFiles(filePath);
       if (candidates.length === 1) {
         uri = candidates[0];
       }
