@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.0.15]
+
+- Added custom error message when registering an external formatter via `custom.registerExternalFormatter`.
+- Improved unit tests and linter checks (added code formatting check)
+
 ## [0.0.14]
 
 - Added `custom.registerExternalFormatter` to support external formatters that send code snippets to a HTTP endpoint.

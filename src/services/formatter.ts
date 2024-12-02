@@ -34,7 +34,9 @@ export async function registerExternalFormatter(
         path: url.pathname,
         method: httpMethod,
         headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           "Content-Type": "application/json",
+          // eslint-disable-next-line @typescript-eslint/naming-convention
           "Content-Length": Buffer.byteLength(payload),
         },
       };

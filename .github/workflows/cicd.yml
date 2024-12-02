@@ -21,6 +21,9 @@ jobs:
       - name: Install npm dependencies
         run: npm install
       
+      - name: Run compile, formatting and linting checks
+        run: npm run pretest
+
       - name: Build and run automation tests
         run: npm run test
 

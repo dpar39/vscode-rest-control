@@ -1,5 +1,6 @@
 import * as assert from "assert";
 import { EXTENSION_ID } from "../../extension";
+import * as fs from "fs";
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
@@ -18,9 +19,9 @@ suite("Extension Test Suite", () => {
   }).timeout(5000);
 
   test("get workspace folders", async () => {
-    const workspaceFolders = (await makeRequest("custom.workspaceFolders")) as string[];
+    const workspaceFolders = (await makeRequest("custom.workspaceFolders")) as any[];
     assert(workspaceFolders.length === 1);
-    const ws = workspaceFolders[0] as any;
+    const ws = workspaceFolders[0];
     assert(ws.name === "workspace1");
     assert(ws.index === 0);
     assert(ws.uri.startsWith("file://"));
@@ -35,8 +36,21 @@ suite("Extension Test Suite", () => {
     assert(workspaceFile === null); // no workspace file
   });
 
-  test("get all commands registred in vscode", async () => {
+  test("get all commands registered in vscode", async () => {
     const commands: string[] = (await makeRequest("custom.getCommands")) as string[];
     assert(commands.length > 100);
+  });
+
+  test("test can open document and get its content", async () => {
+    const xx = await makeRequest("custom.goToFileLineCharacter", ["demo.py:17:28"]);
+    const content: string = (await makeRequest("custom.eval", [
+      "vscode.window.activeTextEditor?.document.getText()",
+    ])) as string;
+    const workspaceFolders = (await makeRequest("custom.workspaceFolders")) as any[];
+    const workspaceAbsPath = workspaceFolders[0].uri.slice("file://".length);
+    const expectedContent = fs.readFileSync(workspaceAbsPath + "/demo.py", {
+      encoding: "utf-8",
+    });
+    assert(content === expectedContent);
   });
 });
