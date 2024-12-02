@@ -5,18 +5,18 @@ export async function makeRequest(
   command: string,
   args: any[] = [],
   port: number = 0,
-  urlEncoded = true
+  urlEncoded = true,
 ) {
   return new Promise((resolve, reject) => {
     const path = urlEncoded
       ? `/?command=${command}&args=${encodeURIComponent(JSON.stringify(args))}`
-      : '/';
+      : "/";
     const req = http.request(
       {
         method: "POST",
         hostname: "localhost",
         port: port || getListeningPort(),
-        path: path
+        path: path,
       },
       (res) => {
         const chunks: any[] = [];
@@ -25,7 +25,7 @@ export async function makeRequest(
           const resBody = Buffer.concat(chunks);
           resolve(JSON.parse(resBody.toString()));
         });
-      }
+      },
     );
     req.on("error", reject);
     if (!urlEncoded) {

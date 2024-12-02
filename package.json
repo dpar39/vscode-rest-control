@@ -74,7 +74,8 @@
     "test-watch": "tsc -watch -p ./",
     "pretest": "npm run test-compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "xvfb-run -a node ./out/test/runTest.js"
+    "test": "xvfb-run -a node ./out/test/runTest.js",
+    "format": "npx prettier --write './**/*.{js,jsx,mjs,cjs,ts,tsx}'"
   },
   "devDependencies": {
     "@types/glob": "^7.1.6",

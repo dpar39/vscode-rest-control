@@ -22,7 +22,7 @@ export async function quickPick(data: any) {
       picker.onDidHide(() => {
         resolve(picker.selectedItems);
         disposable.dispose();
-      })
+      }),
     );
     for (const item of picker.items) {
       if (item.label === defaultLabel) {

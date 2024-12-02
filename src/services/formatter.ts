@@ -9,7 +9,7 @@ export async function registerExternalFormatter(
   formatterEndpoint: string,
   languages: string[],
   httpMethod: string,
-  onErrorMessage: string
+  onErrorMessage: string,
 ) {
   languages = languages || (await vscode.languages.getLanguages());
   httpMethod = httpMethod || "POST";
@@ -21,7 +21,7 @@ export async function registerExternalFormatter(
   const url = new URL(formatterEndpoint);
   formatterRegistration = vscode.languages.registerDocumentFormattingEditProvider(languages, {
     provideDocumentFormattingEdits(
-      doc: vscode.TextDocument
+      doc: vscode.TextDocument,
     ): vscode.ProviderResult<vscode.TextEdit[]> {
       const payload = JSON.stringify({
         file: doc.fileName,
@@ -40,7 +40,7 @@ export async function registerExternalFormatter(
       };
       const range = new vscode.Range(
         doc.lineAt(0).range.start,
-        doc.lineAt(doc.lineCount - 1).range.end
+        doc.lineAt(doc.lineCount - 1).range.end,
       );
       return new Promise((accept, reject) => {
         const httpModule = url.protocol.startsWith("https") ? https : http;
@@ -56,7 +56,7 @@ export async function registerExternalFormatter(
             accept([]); // no edits
             vscode.window.showErrorMessage(
               `Failed to format document with custom formatter: ${err}`,
-              "OK"
+              "OK",
             );
           });
         });
