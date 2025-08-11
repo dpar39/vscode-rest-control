@@ -3,6 +3,7 @@ import * as path from "path";
 
 import { quickPick } from "./quickPick";
 import { registerExternalFormatter } from "./formatter";
+import { registerEventHandler } from "./eventHandler";
 
 function createObject(arg: any): any {
   if (typeof arg === "object" && arg.hasOwnProperty("__type__")) {
@@ -143,6 +144,18 @@ export async function processRemoteControlRequest(command: string, args: any[]):
 
   if (command === "custom.registerExternalFormatter") {
     return await registerExternalFormatter(args[0], args[1], args[2], args[3]);
+  }
+
+  if (command === "custom.registerEventHandler") {
+    return await registerEventHandler(args[0], args[1], args[2], args[3]);
+  }
+
+  if (command === "custom.listOpenedFiles") {
+    return vscode.window.visibleTextEditors.map((editor) => editor.document.uri.fsPath);
+  }
+
+  if (command === "custom.currentFileContent") {
+    return vscode.window.activeTextEditor?.document.getText() || null;
   }
 
   // try to run an arbitrary command with the arguments provided as is

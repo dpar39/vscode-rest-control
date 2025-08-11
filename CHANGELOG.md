@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.16]
+
+- Added custom command `custom.listOpenedFiles` to get the list of all files currently opened
+- Added custom command `custom.currentEditorContent` to get the content of the current (in-focus) editor as a string (if any)
+- Added custom command `custom.registerEventHandler` so that an external HTTP server can handle events from VSCode API
+
 ## [0.0.15]
 
 - Added custom error message when registering an external formatter via `custom.registerExternalFormatter`.
