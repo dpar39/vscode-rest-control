@@ -114,7 +114,10 @@ As the extension progresses, I plan to add more _special_ commands (i.e. command
 - `custom.listInstalledExtensions`: get the list of installed extension IDs
 - `custom.getExtensionInfo`: get details of an installed extension by passing the extension ID
 - `custom.registerExternalFormatter`: registers an external formatter via a HTTP endpoint. The HTTP endpoint will receive a JSON body with the following properties`{"file": "<document file path>", "snippet": "<content to be formatted>", "language": "<language id of the current file>"}` and it should return in the body the formatted code snippet (or the original if the code can't be formatted).
-
+- `custom.listOpenedFiles`: gets the list of all files currently opened (`string[]`)
+- `custom.currentEditorContent`: to get the content of the current (in-focus) editor as a string (`string` or `null`) 
+- `custom.registerEventHandler`: so that an external HTTP server can handle events from VSCode API. Events supported right now are:
+  - `vscode.window.onDidChangeActiveTextEditor`: notifies the full path of the opened file whenever the active text editor changes
 ## To implement in the near future:
 - Add the ability to set a breakpoint at the specified file/line combination
 
