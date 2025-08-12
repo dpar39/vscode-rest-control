@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.17]
+
+- Added more event types that can be registered via `custom.registerEventHandler`
+
 ## [0.0.16]
 
 - Added custom command `custom.listOpenedFiles` to get the list of all files currently opened

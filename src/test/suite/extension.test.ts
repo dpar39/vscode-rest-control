@@ -90,7 +90,7 @@ suite("Extension Test Suite", () => {
   });
 
   test("test can open document and get its content", async () => {
-    const xx = await makeRequest("custom.goToFileLineCharacter", ["demo.py:17:28"]);
+    await makeRequest("custom.goToFileLineCharacter", ["demo.py:17:28"]);
     const content: string = (await makeRequest("custom.currentFileContent")) as string;
     const workspaceFolders = (await makeRequest("custom.workspaceFolders")) as any[];
     const workspaceAbsPath = workspaceFolders[0].uri.slice("file://".length);
@@ -98,21 +98,22 @@ suite("Extension Test Suite", () => {
       encoding: "utf-8",
     });
     assert(content === expectedContent);
+    await makeRequest("workbench.action.closeAllEditors");
   });
 
   test("get all opened files", async () => {
-    const xx = await makeRequest("custom.goToFileLineCharacter", ["demo.py:17:28"]);
+    await makeRequest("custom.goToFileLineCharacter", ["demo.py:17:28"]);
     const openedFiles: string[] = (await makeRequest("custom.listOpenedFiles")) as string[];
     assert(openedFiles.length > 0);
     assert(openedFiles.some((file) => file.endsWith("workspace1/demo.py")));
+    await makeRequest("workbench.action.closeAllEditors");
   });
 
   test("can get vscode.window.onDidChangeActiveTextEditor events", (done) => {
-    const server = new MockHttpServer((data) => {
-      console.log("Received event data:", data);
-      assert(data.name === "vscode.window.onDidChangeActiveTextEditor");
-      if (data.data !== null) {
-        assert(data.data.endsWith("samples.http"));
+    const server = new MockHttpServer((evnt) => {
+      assert(evnt.name === "vscode.window.onDidChangeActiveTextEditor");
+      if (evnt.data !== null) {
+        assert(evnt.data.endsWith("samples.http"));
         done();
       }
     });
@@ -124,6 +125,35 @@ suite("Extension Test Suite", () => {
         "Failed to register event handler",
       ]);
       await makeRequest("custom.goToFileLineCharacter", ["samples.http:1:1"]);
+    });
+  });
+
+  test("can get vscode.window.onDidChangeTextEditorSelection events", (done) => {
+    const server = new MockHttpServer((evnt) => {
+      assert(evnt.name === "vscode.window.onDidChangeTextEditorSelection");
+      if (evnt.data !== null) {
+        const data = evnt.data;
+        const fsPath = data.fsPath;
+        assert(fsPath.endsWith("dummy.txt"));
+        assert(data.selections.length === 1);
+        assert(data.selections[0].start.line === 1);
+        assert(data.selections[0].start.character === 1);
+        assert(data.selections[0].end.line === 1);
+        assert(data.selections[0].end.character === 1);
+        done();
+      }
+    });
+    makeRequest("workbench.action.closeAllEditors").then(async () => {
+      await makeRequest("custom.registerEventHandler", ["", []]);
+      const serverUrl = await server.start();
+      await makeRequest("custom.registerEventHandler", [
+        serverUrl,
+        ["vscode.window.onDidChangeTextEditorSelection"],
+        "POST",
+        "Failed to register event handler",
+      ]);
+      await makeRequest("custom.goToFileLineCharacter", ["dummy.txt:2:2"]);
+      await makeRequest("workbench.action.closeAllEditors");
     });
   });
 });

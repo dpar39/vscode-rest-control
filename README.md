@@ -117,7 +117,12 @@ As the extension progresses, I plan to add more _special_ commands (i.e. command
 - `custom.listOpenedFiles`: gets the list of all files currently opened (`string[]`)
 - `custom.currentEditorContent`: to get the content of the current (in-focus) editor as a string (`string` or `null`) 
 - `custom.registerEventHandler`: so that an external HTTP server can handle events from VSCode API. Events supported right now are:
-  - `vscode.window.onDidChangeActiveTextEditor`: notifies the full path of the opened file whenever the active text editor changes
+  - `vscode.window.onDidChangeActiveTextEditor`
+  - `vscode.window.onDidChangeTextEditorSelection`
+  - `vscode.workspace.onDidSaveTextDocument`
+  - `vscode.workspace.onDidOpenTextDocument`
+  - `vscode.workspace.onDidCloseTextDocument`
+
 ## To implement in the near future:
 - Add the ability to set a breakpoint at the specified file/line combination
 

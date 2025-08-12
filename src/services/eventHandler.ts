@@ -2,6 +2,8 @@ import * as vscode from "vscode";
 import * as http from "http";
 import * as https from "https";
 
+let eventHandlerRegistrations: vscode.Disposable[] = [];
+
 function sendEvent(
   url: URL,
   eventName: string,
@@ -49,7 +51,12 @@ function sendEvent(
   });
 }
 
-let eventHandlerRegistrations: vscode.Disposable[] = [];
+const workspaceEvents = {
+  "vscode.workspace.onDidSaveTextDocument": vscode.workspace.onDidSaveTextDocument,
+  "vscode.workspace.onDidOpenTextDocument": vscode.workspace.onDidOpenTextDocument,
+  "vscode.workspace.onDidCloseTextDocument": vscode.workspace.onDidCloseTextDocument,
+};
+
 export async function registerEventHandler(
   eventHandlerEndpoint: string,
   eventTypes: string[],
@@ -61,12 +68,12 @@ export async function registerEventHandler(
     ehr.dispose();
   }
   eventHandlerRegistrations = [];
-  const url = new URL(eventHandlerEndpoint);
+  const eventHandlerEndpointUrl = new URL(eventHandlerEndpoint);
   if (eventTypes.includes("vscode.window.onDidChangeActiveTextEditor")) {
     eventHandlerRegistrations.push(
       vscode.window.onDidChangeActiveTextEditor((editor) => {
         sendEvent(
-          url,
+          eventHandlerEndpointUrl,
           "vscode.window.onDidChangeActiveTextEditor",
           editor?.document.uri.fsPath,
           httpMethod,
@@ -75,6 +82,37 @@ export async function registerEventHandler(
       }),
     );
   }
-  if (eventTypes.includes("foo")) {
+
+  if (eventTypes.includes("vscode.window.onDidChangeTextEditorSelection")) {
+    eventHandlerRegistrations.push(
+      vscode.window.onDidChangeTextEditorSelection((event) => {
+        sendEvent(
+          eventHandlerEndpointUrl,
+          "vscode.window.onDidChangeTextEditorSelection",
+          {
+            fsPath: event.textEditor.document.uri.fsPath,
+            selections: event.selections,
+          },
+          httpMethod,
+          onErrorMessage,
+        );
+      }),
+    );
+  }
+
+  for (const [eventType, eventHandler] of Object.entries(workspaceEvents)) {
+    if (eventTypes.includes(eventType)) {
+      eventHandlerRegistrations.push(
+        eventHandler((document) => {
+          sendEvent(
+            eventHandlerEndpointUrl,
+            eventType,
+            document.uri.fsPath,
+            httpMethod,
+            onErrorMessage,
+          );
+        }),
+      );
+    }
   }
 }
