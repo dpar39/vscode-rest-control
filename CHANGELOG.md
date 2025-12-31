@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.18]
+
+- When registering events via `custom.registerEventHandler`, only show errors if argument `onErrorMessage` is set upon callback registration.
+
 ## [0.0.17]
 
 - Added more event types that can be registered via `custom.registerEventHandler`

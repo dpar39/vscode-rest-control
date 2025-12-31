@@ -43,7 +43,9 @@ function sendEvent(
     });
     req.on("error", (err) => {
       req.destroy();
-      vscode.window.showErrorMessage(`${onErrorMessage} - ${err}`, "OK");
+      if (onErrorMessage) {
+        vscode.window.showErrorMessage(`${onErrorMessage} - ${err}`, "OK");
+      }
       reject(err);
     });
     req.write(payload);
