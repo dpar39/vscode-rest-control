@@ -147,7 +147,7 @@ export async function processRemoteControlRequest(command: string, args: any[]):
   }
 
   if (command === "custom.registerEventHandler") {
-    return await registerEventHandler(args[0], args[1], args[2], args[3]);
+    return await registerEventHandler(args[0], args[1], args[2], args[3], args[4]);
   }
 
   if (command === "custom.listOpenedFiles") {
