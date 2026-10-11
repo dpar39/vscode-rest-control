@@ -64,12 +64,15 @@ export async function registerEventHandler(
   eventTypes: string[],
   httpMethod: string,
   onErrorMessage: string,
+  keepPreviousRegistrations: boolean,
 ) {
   httpMethod = httpMethod || "POST";
-  for (let ehr of eventHandlerRegistrations) {
-    ehr.dispose();
+  if (!keepPreviousRegistrations) {
+    for (let ehr of eventHandlerRegistrations) {
+      ehr.dispose();
+    }
+    eventHandlerRegistrations = [];
   }
-  eventHandlerRegistrations = [];
   const eventHandlerEndpointUrl = new URL(eventHandlerEndpoint);
   if (eventTypes.includes("vscode.window.onDidChangeActiveTextEditor")) {
     eventHandlerRegistrations.push(

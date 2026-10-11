@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.19]
+
+- When registering events via `custom.registerEventHandler`, add option to allow keeping existing registration so that more than one listener can be registered at the same time for events.
+
 ## [0.0.18]
 
 - When registering events via `custom.registerEventHandler`, only show errors if argument `onErrorMessage` is set upon callback registration.
